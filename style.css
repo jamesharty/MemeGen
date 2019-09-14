@@ -1,0 +1,152 @@
+
+body {
+    background: white;
+    color: black;
+    text-align: center;
+}
+
+h1{
+    text-align: center;
+}
+
+#heading{
+    font-weight: bold;
+}
+
+.row{
+    display: inline-block;
+}
+
+.column1 {
+    float: left;
+    width: auto;
+    padding: 10px;
+    
+   
+}
+
+.column2 {
+    float: left;
+    width: auto;
+    padding: 10px;
+}
+  
+
+#wordInput{
+    border-radius: 10px;
+    border: black solid 3px;
+    text-align: left;
+    width: 300px;
+}
+
+#wordInput ul li{
+	list-style: none;
+    padding:20px;
+}
+
+#line1{
+    width:200px;
+}
+
+#line2{
+    width:200px;
+}
+#line3{
+    width:200px;
+}
+#buttonArea{
+    border-radius: 10px;
+    border: black solid 3px;
+   padding-top: 10px;
+   padding-bottom: 10px;
+    width: 300px;
+}
+
+#createPNGButton{
+    border :2px solid red;
+    border-radius: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+    padding:10px;
+}
+
+
+#canvasArea{
+    
+    border-radius: 10px;
+    border: black solid 3px;
+    width:640px;
+    margin: auto;
+}
+
+#myCanvas{
+    background: rgb(255, 255, 255);
+    margin:auto;
+    padding: 20px;
+}
+
+#searchArea{
+    
+    padding: 20px;
+    border-radius: 10px;
+    border: black solid 3px; 
+    width:700px;
+    text-align: center;
+
+}
+
+#searchBox {
+    padding: 10px;
+}
+
+#output{
+    border: 2px solid black;
+    padding: 20px;
+    padding-bottom: 40px;
+    height: 100px;
+    width:650px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    background-color: grey;
+    margin:auto
+}
+
+#output img{
+    width:100px;
+    height: 100px;
+    border: 3px solid black; 
+}
+
+
+#choices{
+    display: inline-block;
+
+}
+
+#choices img{
+    width:100px;
+    height: 100px;
+    border: 3px solid black; 
+    
+}
+
+#choices ul{
+    margin:auto;
+}
+#choices ul li{
+	list-style: none;
+	float: left;
+    padding:20px;
+   
+}
+
+#edits{
+    position: absolute;
+    top: 30%;
+}
+
+footer{
+    text-align: center;
+}

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+    WebFontConfig = { google: 
+     { families: ["Bowlby One SC", "Righteous", "Corben", "Ultra", "Bungee Inline"]   
+        },
+    active: function () {setTimeout(400)}
+        }
+        </script>
+        <script src="webfontloader.js"></script>
+    <title>Meme Gen</title>
+</head>
+<body>
+
+
+<h1> Meme Generator</h1>
+
+<div class="row">
+        <div class="column1">
+                <div id = wordInput>
+                        <ul>
+                        
+                        <li id=heading>Line 1 <br><input type="text"  id ="line1"> <br><input type="range" min="10" max="50" value="25" class="slider" id="size1"></li>
+                        
+                        <li id=heading>Line 2 <br><input type="text" id="line2"><br><input type="range" min="10" max="50" value="25" class="slider" id="size2"></li>
+                        
+                        <li id=heading>Line 3 <br> <input type="text" id="line3"><br><input type="range" min="10" max="50" value="25" class="slider" id="size3"></li>
+                        </ul>
+                </div>
+                    <br>
+                <div id = wordInput>
+                        <ul>
+                        
+                        <li>Color<br> 
+                            <select id=color>
+                                <option value="white">White</option>
+                                <option value="black" selected>Black</option>
+                                <option value="blue">Blue</option>
+                            </select>  
+                        </li>
+                        
+                        <li>Outline<br>
+                            <select id=outline>
+                                <option value="none">None</option>
+                                <option value="black">Black</option>
+                                <option value="white">White</option>
+                            </select>  
+                        </li>
+                        
+                        <li >Allignment<br>
+                            <select id=allignment>
+                                <option value="left">Left</option>
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                            </select>  
+                        </li>
+
+                        <li>Font<br>
+                            <select id=font>
+                                <option value="bowlby">Bowlby One SC</option>
+                                <option value="righteous">Righteous</option>
+                                <option value="corben">Corben</option>
+                                <option value="ultra">Ultra</option>
+                                <option value="bungee">Bungee Inline</option>
+                            </select>  
+                        </li>
+                        </ul>
+                </div>
+                <br>
+                <div id="buttonArea">
+                    <input type = "button" id = "createPNGButton" value = "Create PNG">
+                </div>
+        </div>
+
+
+        <div class="column2">
+                <div id="canvasArea">
+                        <canvas id="myCanvas" width="500" height="350"></canvas>
+                </div>
+                    
+                <div id ="choices"></div>
+                    
+                <div id= searchArea>
+                    <div id="searchBox">
+                         Tags       
+                        <input type="text" placeholder="Cork, Ireland" id="search" value="Cork,Ireland">
+                        <input type = "button" id = "searchButton" value = "Search">
+                        
+                    </div>
+                    <div id = "output" ></div>
+                    
+                 </div>
+
+
+        </div>
+      </div> 
+</body>
+<footer>
+    James Harty R00147645
+</footer>
+</html>
+
+
+
+<script>
+    
+    var localImageArray = ["Images/cit1.jpg","Images/cit2.jpg","Images/cit3.jpg","Images/cit4.jpg"];
+    window.addEventListener('load', imageList);
+    window.addEventListener('load', searchImage);
+    window.addEventListener('load', Draw);
+    document.getElementById('searchButton').onclick = searchImage;
+    document.getElementById('createPNGButton').onclick = createNewImage;    
+    var ImageArray = [];
+
+    //Flickr images 
+
+    
+    function searchImage()
+    {
+        var searchQuery = document.getElementById('search').value
+        ImageArray =[];
+        newScript = document.createElement('script');
+        request = "https://www.flickr.com/services/rest/?";
+        request += "method=flickr.photos.search";
+        request += "&per_page=20";
+        request += "&api_key=91ca4787aaab5bc5008482bf0207a7e7";
+        request += "&tags=" +searchQuery;
+        request += "&format=json";
+        request += "&tag_mode=all";
+        newScript.setAttribute('src',request);
+        document.getElementsByTagName('head')[0].appendChild(newScript);
+        document.getElementById('output').innerHTML = "Searching Images. . . " ;
+    }
+    function jsonFlickrApi(images)
+    {
+        var display =document.getElementById("output");
+        newStr ="";
+        for (i = 0; i < images.photos.photo.length; i++ )
+        {
+            url = "https://farm" + images.photos.photo[i].farm;
+            url += ".static.flickr.com/" ;
+            url += images.photos.photo[i].server + "/";
+            url += images.photos.photo[i].id + "_";
+            url += images.photos.photo[i].secret;
+            url += ".jpg"
+            newStr += ' <img src = "' + url +'" onclick="imageFunction2('+i+')" > ';
+            ImageArray.push(url);
+        }
+
+       
+        display.innerHTML = newStr;
+    }
+
+    //Local images
+
+    function imageList(){
+
+        var display =document.getElementById("choices");
+		var w = "<ul >"
+
+                for (var i=0; i<localImageArray.length; i++)
+		{
+			w += '<li><br><img src="'+localImageArray[i]+'" onclick="imageFunction('+i+')" ></li>';		
+		}
+		w += "</ul>"
+		display.innerHTML = w;
+
+    }
+
+
+     //Background chooser NOTE: Must double click on image for it to load properly
+     var background=new Image();
+    background.setAttribute('crossOrigin','anonymous');
+     function imageFunction(x){
+         
+                background.src = localImageArray[x];
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.width = background.width;
+                canvas.height = background.height;
+                ctx.drawImage(background,0,0);
+                Draw();
+            }
+
+        function imageFunction2(x){
+                background.src = ImageArray[x];
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.width = background.width;
+                canvas.height = background.height;
+                ctx.drawImage(background,0,0);
+                Draw();
+            }
+        /*Canvas*/
+       
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = background.width;
+        canvas.height = background.height;
+       
+
+        //Background chooser
+        function imageFunction(x){
+                background.src = localImageArray[x];
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.width = background.width;
+                canvas.height = background.height;
+                ctx.drawImage(background,0,0);
+                Draw();
+            }
+
+        function imageFunction2(x){
+                background.src = ImageArray[x];
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.width = background.width;
+                canvas.height = background.height;
+                ctx.drawImage(background,0,0);
+                Draw();
+            }
+
+
+        //Color Picker 
+        
+        function colorPicker(){
+            var colorPicked = document.getElementById("color");
+       
+            if(colorPicked.value=="black"){
+                
+                ctx.fillStyle='#000000';
+                
+            }
+            else if(colorPicked.value=="white"){
+               
+                ctx.fillStyle='#FFFFFF';
+                
+            }
+            else if(colorPicked.value=="blue"){
+               
+               ctx.fillStyle='#0000FF';
+               
+            } 
+
+        }
+
+        //Outline Picker
+        function outlinePicker(){
+            var outlinePicked = document.getElementById("outline");
+       
+            if(outlinePicked.value=="black"){
+                ctx.strokeStyle = '#000000';
+               
+                
+            }
+            else if(outlinePicked.value=="white"){
+                ctx.strokeStyle='#FFFFFF';
+        
+            }
+           
+           else{
+            ctx.strokeStyle = "rgba(1, 1, 1, 0)";
+            
+           }
+        }
+        
+        //Allignment Picker
+        function allignmentPicker(){
+            var allignmentPicked = document.getElementById("allignment");
+            var position;
+            if(allignmentPicked.value=="left"){
+                ctx.textAlign = "left";
+                position =10;
+                
+            }
+            else if(allignmentPicked.value=="center"){
+                ctx.textAlign = "center";
+                position =canvas.width/2;
+            }
+           
+            else if(allignmentPicked.value=="right"){
+                ctx.textAlign = "right";
+                position =canvas.width;
+               
+            } 
+            return position;
+        }
+        //Font Picker
+        function fontPicker(){
+            var fontPicked = document.getElementById("font");
+            var font;
+            if(fontPicked.value=="bowlby"){
+               
+                font=WebFontConfig.google.families[0];
+                
+            }
+            else if(fontPicked.value=="righteous"){
+                
+                font=WebFontConfig.google.families[1];
+            }
+           
+            else if(fontPicked.value=="corben"){
+               
+                font=WebFontConfig.google.families[2];
+               
+            } 
+
+            else if(fontPicked.value=="ultra"){
+               
+               font=WebFontConfig.google.families[3];
+              
+           } 
+           else if(fontPicked.value=="bungee"){
+               
+               font=WebFontConfig.google.families[4];
+              
+           } 
+            return  font;
+        }
+        
+
+       
+
+        /* Drawing text */
+        document.getElementById('line1').addEventListener('keyup', function() {
+            Draw();
+        });
+
+        document.getElementById('line2').addEventListener('keyup', function() {
+            Draw();
+        });
+
+        document.getElementById('line3').addEventListener('keyup', function() {
+            Draw();
+        });
+
+        document.getElementById('color').addEventListener('change', function() {
+            Draw()
+        });
+
+        document.getElementById('outline').addEventListener('change', function() {
+            Draw()
+        });
+
+        document.getElementById('allignment').addEventListener('change', function() {
+            Draw()
+        });
+
+        document.getElementById('font').addEventListener('change', function() {
+            Draw()
+        });
+
+        function Draw(){
+            ctx.drawImage(background,0,0);
+            colorPicker();
+            outlinePicker();
+            var w= allignmentPicker(); 
+            var f = fontPicker();
+            DrawText1(w,f);
+            DrawText2(w,f);
+            DrawText3(w,f);
+        }
+
+        //Line 1
+        function DrawText1(w,f) {
+            var lineOneText ="";
+            var slider = document.getElementById("size1");
+            ctx.font = slider.value+"px "+f;
+            ctx.textBaseline = 'bottom';
+            lineOneText = line1.value;
+            ctx.clearRect(0,0,0,0);
+            ctx.fillText(lineOneText, w, 50);
+            ctx.strokeText(lineOneText, w, 50);
+              
+        }
+        //Line 2
+        function DrawText2(w,f) {
+            
+            var lineTwoText ="";
+            var slider = document.getElementById("size2");
+            ctx.font = slider.value+"px "+f;
+            ctx.textBaseline = 'bottom';
+            lineTwoText = line2.value;
+            ctx.clearRect(0,0,0,0);
+            ctx.fillText(lineTwoText, w, canvas.height/2 +25);
+            ctx.strokeText(lineTwoText, w, canvas.height/2+25);
+            }
+
+         //Line 3
+        function DrawText3(w,f) {
+            
+            var lineThreeText ="";
+            var slider = document.getElementById("size3");
+            ctx.font = slider.value+"px "+f;
+            ctx.textBaseline = 'bottom';
+            lineThreeText = line3.value;
+            ctx.clearRect(0,0,0,0);
+            ctx.fillText(lineThreeText, w, canvas.height);
+            ctx.strokeText(lineThreeText, w, canvas.height);   
+            }
+
+
+            //Sliders for text size
+            document.getElementById('size1').onmousemove =Draw;
+            document.getElementById('size2').onmousemove =Draw;
+            document.getElementById('size3').onmousemove =Draw;
+            
+
+            
+
+        //Create Image function
+         function createNewImage(){
+               
+                window.open(canvas.toDataURL());
+            }
+
+</script>
